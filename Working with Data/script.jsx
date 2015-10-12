@@ -2,7 +2,7 @@ var Card = React.createClass(
 {
 	getInitialState: function()
 	{
-		return{};
+		return {};
 	},
 	componentDidMount: function()
 	{
@@ -24,14 +24,56 @@ var Card = React.createClass(
 	}
 });
 
-var Main = React.createClass(
-{
+var Form = React.createClass(
+{	
+	handleSubmit: function(e)
+	{
+		e.preventDefault();
+		var loginInput = React.findDOMNode(this.refs.login);
+		this.props.addCard(loginInput.value);
+		loginInput.value = '';
+	},
   	render: function()
 	{
 		return(
+			<form onSubmit={this.handleSubmit}>
+				<input placeholder="github login" ref="login" />
+				<button>Add</button>
+			</form>
+		);
+	}
+});
+
+var Main = React.createClass(
+{
+	getInitialState: function()
+	{
+		return{
+			logins: ['raymondsquared', 'petehunt']
+		};
+	},
+	addCard: function(loginToAdd)
+	{
+		this.setState(
+			{
+				logins: this.state.logins.concat(loginToAdd)
+			}
+		);
+	},
+  	render: function()
+	{
+		var cards = this.state.logins.map(
+			function(login)
+			{
+				return(        			
+					<Card login={login} />
+				);
+			}
+		);
+		return(
 			<div>
-				<Card login="raymondsquared" />
-				<Card login="petehunt" />
+				<Form addCard={this.addCard} />
+				{cards}				
 			</div>
 		);
 	}
