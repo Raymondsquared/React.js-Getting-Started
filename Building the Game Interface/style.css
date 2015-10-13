@@ -27,9 +27,9 @@ body
 	height: 150px;
 }
 
-#numbers-frame .number
+#numbers-frame .number, #answer-frame .well span
 {
-	display: inline-block;;
+	display: inline-block;
 	margin: 0.5em;
 	background-color: #BBBBBB;
 	width: 30px;
@@ -37,4 +37,11 @@ body
 	font-size: 22px;
 	border-radius: 50%;
 	cursor: pointer;
+}
+
+#numbers-frame .selected-true
+{	
+	background-color: #E8E8E8;
+	color: #DDDDDD;
+	cursor: not-allowed;
 }
