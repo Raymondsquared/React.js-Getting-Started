@@ -2,7 +2,7 @@ var StarsFrame = React.createClass(
 {
   	render: function()
 	{
-		var numberOfStars = Math.floor(Math.random()*9) + 1;
+		var numberOfStars = this.props.numberOfStars;
 
 		var stars = [];
 
@@ -55,14 +55,17 @@ var NumbersFrame = React.createClass(
 	{
 		var numbers = [];		
 		var className;
+		var clickNumber = this.props.clickNumber;
 		var selectedNumbers = this.props.selectedNumbers;
 
 		for (var i = 0; i <= 9; i++) 
 		{
 			className = "number selected-" + (selectedNumbers.indexOf(i) >= 0);
 
-			numbers.push(
-				<div className={className}>{i}</div>
+			numbers.push(				
+				<div className={className} onClick={clickNumber.bind(null, i)}>
+					{i}
+				</div>
 			);
 		}
 
@@ -81,8 +84,18 @@ var Game = React.createClass(
 	getInitialState: function()
 	{
 		return {
-			selectedNumbers: [3, 6]
+			numberOfStars: Math.floor(Math.random()*9) + 1,
+			selectedNumbers: []
 		};
+	},
+	clickNumber: function(clickedNumber)
+	{
+		if(this.state.selectedNumbers.indexOf(clickedNumber) < 0)
+		{
+			this.setState({
+				selectedNumbers: this.state.selectedNumbers.concat(clickedNumber)
+			});
+		}		
 	},
   	render: function()
 	{
@@ -91,13 +104,13 @@ var Game = React.createClass(
 				<h2> Play Nine </h2>
 				<hr />
 				<div className="clearfix">
-					<StarsFrame />
+					<StarsFrame numberOfStars={this.state.numberOfStars}/>
 					<ButtonFrame />
 					<AnswerFrame selectedNumbers={this.state.selectedNumbers} />
 				</div>
 
 
-				<NumbersFrame selectedNumbers={this.state.selectedNumbers}/>
+				<NumbersFrame selectedNumbers={this.state.selectedNumbers} clickNumber={this.clickNumber} />
 			</div>
 		);
 	}
