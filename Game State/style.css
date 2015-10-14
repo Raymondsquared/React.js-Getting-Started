@@ -45,3 +45,10 @@ body
 	color: #DDDDDD;
 	cursor: not-allowed;
 }
+
+#numbers-frame .used-true
+{	
+	background-color: #AADDAA;
+	color: #99BB99;
+	cursor: not-allowed;
+}
