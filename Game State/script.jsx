@@ -63,7 +63,11 @@ var ButtonFrame = React.createClass(
 			<div id="button-frame">
 				{button}
 				<br /><br />
-				<button className="btn btn-warning btn-xs" onClick={this.props.redraw}>
+				<button 
+					className="btn btn-warning btn-xs" 
+					onClick={this.props.redraw} 
+					disabled={this.props.redraws === 0} > 
+
 					<span className="glyphicon glyphicon-refresh"></span>
 					&nbsp;
 					{this.props.redraws}
@@ -132,17 +136,35 @@ var NumbersFrame = React.createClass(
 	}
 });
 
+var DoneFrame = React.createClass(
+{	
+	render: function()
+	{
+		return(
+			<div className="well text-center">
+				<h2>{this.props.doneStatus}</h2>
+			</div>
+		);
+	}
+});
+
+
 var Game = React.createClass(
 {
 	getInitialState: function()
 	{
 		return {
-			numberOfStars: Math.floor(Math.random()*9) + 1,
+			numberOfStars: this.randomNumber(),
 			selectedNumbers: [],
 			usedNumbers: [],
 			redraws: 5,
-			correct: null
+			correct: null,
+			doneStatus: null
 		};
+	},
+	randomNumber: function()
+	{
+		return Math.floor(Math.random()*9) + 1;
 	},
 	selectNumber: function(clickedNumber)
 	{
@@ -192,7 +214,7 @@ var Game = React.createClass(
 			selectedNumbers: [],
 			usedNumbers: usedNumbers,
 			correct: null,
-			numberOfStars:  Math.floor(Math.random()*9) + 1
+			numberOfStars: this.randomNumber()
 		});
 	},
 	redraw: function()
@@ -200,7 +222,7 @@ var Game = React.createClass(
 		if(this.state.redraws > 0)
 		{
 			this.setState({
-				numberOfStars: Math.floor(Math.random()*9) + 1,
+				numberOfStars: this.randomNumber(),
 				correct: null,
 				selectedNumbers: [],
 				redraws: this.state.redraws - 1
@@ -214,6 +236,21 @@ var Game = React.createClass(
 		var numberOfStars = this.state.numberOfStars;		
 		var correct = this.state.correct;
 		var redraws = this.state.redraws;
+		var doneStatus = this.state.doneStatus;
+
+		var bottomFrame;
+
+		if(doneStatus)
+		{
+			bottomFrame = <DoneFrame doneStatus={doneStatus}/>;
+		}
+		else
+		{
+			bottomFrame = <NumbersFrame 
+							selectedNumbers={selectedNumbers} 
+							usedNumbers={usedNumbers}
+							selectNumber={this.selectNumber} />	
+		}
 
 		return(
 			<div id="game">
@@ -233,11 +270,7 @@ var Game = React.createClass(
 						unselectNumber={this.unselectNumber} />
 				</div>
 
-
-				<NumbersFrame 
-					selectedNumbers={selectedNumbers} 
-					usedNumbers={usedNumbers}
-					selectNumber={this.selectNumber} />
+				{bottomFrame}
 			</div>
 		);
 	}
